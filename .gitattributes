@@ -1,1 +1,4 @@
 *.gif filter=lfs diff=lfs merge=lfs -text
+
+# Website-served assets must not use LFS pointers on GitHub Pages.
+web_assets/** -filter -diff -merge -text
