@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IJRR Paper - Whole-Body MPC Template</title>
+    <link rel="stylesheet" href="styles.css" />
+    <meta name="description" content="IJRR paper demo website template with placeholders for videos and gifs." />
+    <script>
+      window.MathJax = {
+        tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+        chtml: {
+          scale: 1,
+          minScale: 1,
+          mtextInheritFont: true,
+          matchFontHeight: true
+        },
+        options: {
+          renderActions: {
+            addMenu: []
+          }
+        }
+      };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+  </head>
+  <body>
+    <main>
+      <section class="hero" id="home">
+        <div class="container hero-grid">
+          <div class="hero-title-row">
+            <h1>RK-MPC: Residual Koopman Model Predictive Control for Quadruped Locomotion</h1>
+            <p class="hero-authors">
+              Sriram S. K. S. Narayanan<sup>1</sup>, Umesh Vaidya<sup>1</sup>
+            </p>
+            <p class="hero-affiliations">
+              <span><sup>1</sup> Department of Mechanical Engineering, Clemson University</span>
+            </p>
+          </div>
+
+          <div class="hero-media-wide">
+            <img src="images/offroad_snow_fluor_daniel.gif" alt="Snow terrain closeup" />
+          </div>
+
+          <div class="hero-content">
+            <div class="hero-video-panel">
+              <div class="hero-video-grid">
+                <video src="videos/videos_panel.mp4" autoplay muted loop playsinline controls></video>
+              </div>
+            </div>
+
+            <div class="hero-abstract">
+              <h3>Key Contributions</h2>
+                <ul class="feature-list">
+                    <li>Residual Koopman model: a Koopman-based data-driven framework that learns a compact linear residual correction on top of a nominal template model, along with formal guarantees on multi-step prediction error through bounded residual dynamics.</li>
+                    <li>Convex RK-MPC: a MPC formulation that embeds the learned residual predictor within a receding-horizon controller and runs onboard in real time at 500 Hz.</li>
+                    <li>extensive Gazebo simulations and Unitree Go1 experiments demonstrating reliable tracking of planar velocity commands and robust blind locomotion across contact disturbances, multiple gait schedules, and off-road terrains (grass, gravel, snow, and ice).</li>
+                </ul>
+            </div>
+            <div class="hero-quick-links">
+              <a href="#RK-MPC" class="btn">RK-MPC Formulation</a>
+              <a href="#simulation" class="btn">Simulation</a>
+              <a href="#demos" class="btn">Experiments</a>
+              <a href="#" class="btn btn-coming-soon" aria-disabled="true">ArXiv (coming soon)</a>
+              <a href="#" class="btn btn-coming-soon" aria-disabled="true">GitHub (coming soon)</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" class="section">
+        <div class="container">
+          <h2>Abstract</h2>
+          <p>
+            This paper presents Residual Koopman MPC (RK-MPC), a Koopman-based,
+            data-driven model predictive control framework for quadruped
+            locomotion that improves prediction fidelity while preserving
+            real-time tractability. RK-MPC augments a nominal single-rigid-body
+            template model with a compact linear residual predictor learned from
+            data in lifted coordinates, enabling systematic correction of model
+            mismatch caused by contact variability and rough terrain.
+          </p>
+          <p>
+            The learned residual model is embedded within a convex quadratic program
+            MPC formulation, yielding a receding-horizon controller that runs
+            onboard at $500\,\mathrm{Hz}$ and retains optimization-based constraints. We evaluate
+            RK-MPC in Gazebo simulation and Unitree Go1 hardware experiments,
+            demonstrating reliable blind locomotion across disturbances, gait
+            schedules, and off-road terrain (grass, gravel, snow, ice).
+          </p>
+          <p>
+            We further compare against Koopman/EDMD baselines using monomial and
+            SE(3)-structured observables, showing the residual correction improves
+            multi-step prediction and closed-loop performance while reducing
+            sensitivity to observable choice.
+          </p>
+      </section>
+
+      <section id="model-identification" class="section">
+        <div class="container">
+          <h2 class="slide-title">Residual Koopman Model Identification</h2>
+          <p class="slide-subtitle">Residual Koopman model framework, data preprocessing, and prediction performance results.</p>
+
+          <div class="slide-content">
+            <div class="slide-image">
+              <img src="images/residual_koopman_lifting_fig.png" alt="Residual Koopman Model diagram" />
+            </div>
+            <div class="slide-note">
+              <h3>Key points</h3>
+              <ul>
+                <li>Nominal model: $(A^{\mathrm{nom}}, B^{\mathrm{nom}})$</li>
+                <li>Residual predictor in lifted state: $C^{\mathrm{res}}(A^{\mathrm{res}} z + B^{\mathrm{res}} u)$</li>
+                <li>Convex MPC executed at $500\,\mathrm{Hz}$ running on Jetson NX</li>
+                <li>Improves multi-step tracking for off-road locomotion</li>
+              </ul>
+            </div>
+          </div>
+          <h3>Dataset Generation</h3>
+          <p>Training data were generated in Gazebo with a nominal locomotion controller over $10$ independent episodes (≈2 min each) at $100\,\mathrm{Hz}$, yielding $N=121{,}753$ synchronized samples after transient removal. Each episode used randomized terrain and friction ($\mu\in[0.5,1.0]$) and uniformly randomized planar velocity commands $v_x,v_y\in[-0.7,0.7]~\mathrm{m/s}$, $\omega_z\in[-0.5,0.5]~\mathrm{rad/s}$, filtered for smooth references.</p>
+          <p>The dataset coverage is shown in the figure below with sampled velocities, reference commands, GRFs, and trot gait schedule; it supports robust residual Koopman fitting and sim-to-real generalization.</p>
+
+          <div class="fig-grid">
+            <div class="fig-card fig-card-medium fig-card-plain">
+              <img src="images/quad_gazebo_train_data.png" alt="Quad Gazebo training dataset" />
+              <p class="fig-caption">Training dataset coverage for residual Koopman training and evaluation.</p>
+            </div>
+          </div>
+          <h3>Prediction Performance</h3>
+          <p>For the Residual Koopman model identification, we construct residual targets $e_k=[\Delta v_k^\top\;\Delta\omega_k^\top]^\top\in\mathbb{R}^6$, and lift them via degree-2 monomials $z_k=\psi(e_k)$, and use EDMDc to estimate $(A^{\mathrm{res}},B^{\mathrm{res}})$ with output regression for $C^{\mathrm{res}}$. The learned correction is projected back to physical residual space as $e_k\approx C^{\mathrm{res}} z_k$, preserving a lightweight structure around the SRB predictor.</p>
+          <ul>
+            <li>Residual Koopman model achieves low multi-step prediction error: open loop RMSE of $0.033\pm0.0028$ m/s for velocity and $0.033\pm0.0027$ rad/s for angular velocity.</li>
+            <li>Residual Koopman model is highly sample efficient: RMSE improves from $0.3759\pm0.1385$ at 100 samples to $0.0403\pm0.0046$ at 1000, saturating near $0.033$ at 10,000 samples.</li>
+            <li>Monomial EDMD (EDMD-mono) has large error growth, while EDMD with SE(3) basis (EDMD-SE3) and Residual Koopman (res-koopman) models perform better than the SRB template model in open loop predictions.</li>
+            <li>EDMD with SE(3) basis leads to small orientation errors that perturb the lifted coordinates and compound over multi-step rollouts, leading to horizon-dependent attitude drift.</p></li>
+          </ul>
+          <p>The figure below compares trajectory predictions and per-channel RMSE, and shows sample-count and polynomial-degree sweep behaviors for the residual Koopman correction.</p>
+
+          <div class="fig-grid">
+            <div class="fig-card fig-card-medium fig-card-plain">
+              <img src="images/res_edmd_predictions.png" alt="Residual and EDMD predictions" />
+              <p class="fig-caption">Residual Koopman vs EDMD & SRB models prediction performance and RMSE analysis (open loop).</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="RK-MPC" class="section">
+        <div class="container">
+          <h2 class="experiment-title">Residual Koopman MPC Formulation</h2>
+          <div class="rkmpc-formula">
+            <p>Given lifted residual state $z_k = \psi(e_k)$, residual correction $C^{\mathrm{res}}$, and nominal dynamics $(A^{\mathrm{nom}},B^{\mathrm{nom}})$, the MPC problem is:</p>
+            <div class="rkmpc-formula-box">
+              <p class="rkmpc-ocp-equation">\[
+                \begin{aligned}
+                \min_{\{u_{k+i}\}_{i=0}^{N_h-1}} \quad
+                & \sum_{i=0}^{N_h-1} (x_{k+i}-x^\star_{k+i})^\top Q (x_{k+i}-x^\star_{k+i}) + u_{k+i}^\top R u_{k+i} \\
+                &\quad + (x_{k+N_h}-x^\star_{k+N_h})^\top Q_f (x_{k+N_h}-x^\star_{k+N_h}) \\
+                \text{s.t.} \quad
+                & x_{k+i+1} = A^{\mathrm{nom}}_{k+i} x_{k+i} + B^{\mathrm{nom}}_{k+i} u_{k+i} + C^{\mathrm{res}}(A^{\mathrm{res}} z_{k+i} + B^{\mathrm{res}} u_{k+i}) \\
+                & z_{k+i} = \psi(e_{k+i}),\qquad
+                e_{k+i} = \begin{bmatrix}v_{k+i}-v^{\mathrm{nom}}_{k+i}\\ \omega_{k+i}-\omega^{\mathrm{nom}}_{k+i} \end{bmatrix} \\
+                & A_{ineq}(\sigma_{k+i}) u_{k+i} \le b_{ineq}(\sigma_{k+i})
+                \end{aligned}
+              \]</p>
+            </div>
+          </div>
+          <div class="rkmpc-framework-raw">
+            <img src="images/rk_mpc_framework_fig.png" alt="RK-MPC framework overview figure" />
+            <p class="fig-caption">RK-MPC framework diagram used in the control architecture.</p>
+          </div>
+
+           <p>
+              We validate Residual Koopman MPC (RK-MPC) on Unitree Go1 hardware in blind-locomotion conditions
+              (no exteroceptive sensing), using only proprioception and commanded planar references.
+            </p>
+            <ul>
+              <li>Compute platform: full control stack runs onboard an NVIDIA Jetson Xavier NX.</li>
+              <li>Control law: at each cycle, RK-MPC solves the convex Q with the residual Koopman model, then applies the first optimal command $u_k^\star$.</li>
+              <li>Reference generation: user commands $(v_x^{\mathrm{cmd}},\,v_y^{\mathrm{cmd}},\,\omega_z^{\mathrm{cmd}})$ are converted by a smooth global planner into a reference sequence $\{x_{k+i}^\star\}_{i=0}^{N}$ for the center of mass of the robot.</li>
+              <li>Estimation and locomotion stack: SRB state $x_k$ from a linear Kalman filter; contact timing from a wave-based gait scheduler; swing footholds from a Raibert-style heuristic.</li>
+              <li>Rates: estimator and RK-MPC run at $500\,\mathrm{Hz}$; stance and swing torque control also runs at $500\,\mathrm{Hz}$; MPC discretization step is $0.01\,\mathrm{s}$.</li>
+            </ul>
+          </div>
+      </section>
+
+      <section id="simulation" class="section">
+        <div class="container">
+          <h2 class="experiment-title">RK-MPC Simulation</h2>
+          <p>RK-MPC is able to reliably track a circle of unit radius and a figure-8 maneuver over 10 laps with command velocity 0.5 m/s.</p>
+          <div class="simulation-grid">
+            <div class="sim-card" style="grid-column: 1 / -1;">
+              <div class="multi-video-row">
+                <div class="media-card sim-video-card">
+                  <h4 class="sim-panel-title">Circular loops</h4>
+                  <video src="videos/rk_mpc_circle_sim_short.mp4" autoplay muted loop playsinline controls></video>
+                </div>
+                <div class="media-card sim-video-card">
+                  <h4 class="sim-panel-title">Random sinusoids</h4>
+                  <video src="videos/rk_mpc_eight_sim_short.mp4" autoplay muted loop playsinline controls></video>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+       
+
+      <section id="demos" class="section">
+        <div class="container demo-container">
+          <h2 class="experiment-title">Experiments</h2>
+          <h3 class="experiment-subtitle">Experiment 1: Velocity Tracking</h3>
+          <div class="experiment">
+            <div class="grid-gallery two-per-row">
+              <div class="media-card media-card-fixed">
+                <h4>Circular loops</h4>
+                <img src="images/vel_tracking_circle.gif" alt="Circular loops gif" />
+              </div>
+              <div class="media-card media-card-fixed">
+                <h4>Random sinusoids</h4>
+                <img src="images/vel_tracking_sine.gif" alt="Random sinusoids gif" />
+              </div>
+            </div>
+          </div>
+
+          <h3 class="experiment-subtitle">Experiment 2: Robustness to Debris and Push Recovery</h3>
+          <div class="experiment">
+            <div class="grid-gallery two-per-row">
+              <div class="media-card">
+                <h4>Longitudinal Push</h4>
+                <img src="images/push_recovery_lat.gif" alt="Push recovery lat" />
+              </div>
+              <div class="media-card">
+                <h4>Lateral Push</h4>
+                <img src="images/push_recovery_long.gif" alt="Push recovery long" />
+              </div>
+              <div class="media-card">
+                <h4>Debris 1</h4>
+                <img src="images/debris1.gif" alt="Debris scenario 1" />
+              </div>
+              <div class="media-card">
+                <h4>Debris 2</h4>
+                <img src="images/debris2.gif" alt="Debris scenario 2" />
+              </div>
+              <div class="media-card">
+                <h4>Debris 3</h4>
+                <img src="images/debris3.gif" alt="Debris scenario 3" />
+              </div>
+              <div class="media-card">
+                <h4>Debris 4</h4>
+                <img src="images/debris4.gif" alt="Debris scenario 4" />
+              </div>
+            </div>
+          </div>
+
+          <h3 class="experiment-subtitle">Experiment 3: Generalization to Off-road Terrain</h3>
+          <div class="experiment">
+            <div class="grid-gallery two-per-row">
+              <div class="media-card">
+                <h4>Grass</h4>
+                <img src="images/offroad_grass.gif" alt="Offroad grass" />
+              </div>
+              <div class="media-card">
+                <h4>Gravel</h4>
+                <img src="images/offroad_gravel.gif" alt="Offroad gravel" />
+              </div>
+              <div class="media-card">
+                <h4>Ice</h4>
+                <img src="images/offroad_ice.gif" alt="Offroad ice" />
+              </div>
+              <div class="media-card">
+                <h4>Snow</h4>
+                <img src="images/offroad_snow_long.gif" alt="Offroad snow long" />
+              </div>
+            </div>
+          </div>
+
+          <h3 class="experiment-subtitle">Experiment 4: Executing Different Gaits</h3>
+          <div class="experiment">
+            <div class="grid-gallery">
+              <div class="media-card">
+                <h4>Crawl</h4>
+                <img src="images/gait_crawl.gif" alt="Gait crawl" />
+              </div>
+              <div class="media-card">
+                <h4>Trot</h4>
+                <img src="images/gait_trot.gif" alt="Gait trot" />
+              </div>
+              <div class="media-card">
+                <h4>Fly Trot</h4>
+                <img src="images/gait_fly_trot.gif" alt="Gait fly trot" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
+
+
+
