@@ -1,0 +1,7 @@
+# Source media (kept locally; not part of website publishing)
+images/
+videos/
+
+# Website-ready media that index.html uses
+!web_assets/
+!web_assets/**
