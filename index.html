@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IJRR Paper - Whole-Body MPC Template</title>
+    <title>RK-MPC - Residual Koopman Model Predictive Control for Quadruped Locomotion in Offroad Environments</title>
     <link rel="stylesheet" href="styles.css" />
-    <meta name="description" content="IJRR paper demo website template with placeholders for videos and gifs." />
+    <meta name="description" content="RK-MPC webiste with videos" />
     <script>
       window.MathJax = {
         tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
@@ -29,7 +29,7 @@
       <section class="hero" id="home">
         <div class="container hero-grid">
           <div class="hero-title-row">
-            <h1>RK-MPC: Residual Koopman Model Predictive Control for Quadruped Locomotion</h1>
+            <h1>RK-MPC: Residual Koopman Model Predictive Control for Quadruped Locomotion in Offroad Environemnts</h1>
             <p class="hero-authors">
               Sriram S. K. S. Narayanan<sup>1</sup>, Umesh Vaidya<sup>1</sup>
             </p>
@@ -50,19 +50,42 @@
             </div>
 
             <div class="hero-abstract">
-              <h3>Key Contributions</h2>
+              <h3>Key Contributions</h3>
                 <ul class="feature-list">
-                    <li>Residual Koopman model: a Koopman-based data-driven framework that learns a compact linear residual correction on top of a nominal template model, along with formal guarantees on multi-step prediction error through bounded residual dynamics.</li>
-                    <li>Convex RK-MPC: a MPC formulation that embeds the learned residual predictor within a receding-horizon controller and runs onboard in real time at 500 Hz.</li>
-                    <li>extensive Gazebo simulations and Unitree Go1 experiments demonstrating reliable tracking of planar velocity commands and robust blind locomotion across contact disturbances, multiple gait schedules, and off-road terrains (grass, gravel, snow, and ice).</li>
+                    <li>Residual Koopman model: A Koopman-based data-driven framework that learns a compact linear residual correction on top of a nominal template model, along with formal guarantees on multi-step prediction error through bounded residual dynamics.</li>
+                    <li>Convex RK-MPC: A MPC formulation that embeds the learned residual predictor within a receding-horizon controller and runs onboard in real time at 500 Hz.</li>
+                    <li>Validation in simulation and hardware: Extensive Gazebo simulations and Unitree Go1 experiments demonstrating reliable tracking of planar velocity commands and robust blind locomotion across contact disturbances, multiple gait schedules, and off-road terrains (grass, gravel, snow, and ice).</li>
                 </ul>
             </div>
             <div class="hero-quick-links">
-              <a href="#RK-MPC" class="btn">RK-MPC Formulation</a>
               <a href="#simulation" class="btn">Simulation</a>
               <a href="#demos" class="btn">Experiments</a>
-              <a href="#" class="btn btn-coming-soon" aria-disabled="true">ArXiv (coming soon)</a>
-              <a href="#" class="btn btn-coming-soon" aria-disabled="true">GitHub (coming soon)</a>
+              <a href="#" class="btn icon-btn btn-coming-soon" aria-disabled="true">
+                <span class="btn-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" focusable="false">
+                    <path d="M6 2h8l6 6v14H6V2zm7 1.5V9h5.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M9 13h6M9 17h6M9 9h2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span>Paper (coming soon)</span>
+              </a>
+              <a href="#" class="btn icon-btn btn-coming-soon" aria-disabled="true">
+                <span class="btn-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" focusable="false">
+                    <path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.41-4.04-1.41-.55-1.37-1.33-1.73-1.33-1.73-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.22 1.84 1.22 1.08 1.82 2.82 1.29 3.5.98.11-.76.42-1.29.76-1.58-2.67-.3-5.47-1.31-5.47-5.86 0-1.3.47-2.37 1.24-3.2-.12-.3-.54-1.52.12-3.16 0 0 1.01-.32 3.3 1.22a11.55 11.55 0 0 1 6 0c2.28-1.54 3.29-1.22 3.29-1.22.66 1.64.25 2.86.12 3.16.77.83 1.24 1.9 1.24 3.2 0 4.56-2.8 5.55-5.48 5.85.43.37.82 1.1.82 2.22v3.29c0 .32.21.69.83.57A12 12 0 0 0 12 .5z" fill="currentColor"/>
+                  </svg>
+                </span>
+                <span>Code (coming soon)</span>
+              </a>
+              <a href="#" class="btn icon-btn btn-coming-soon" aria-disabled="true">
+                <span class="btn-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" focusable="false">
+                    <path d="M6.5 5.5L17.5 18.5M17.5 5.5L6.5 18.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M4 12h4M16 12h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span>arXiv (coming soon)</span>
+              </a>
             </div>
           </div>
         </div>
@@ -294,6 +317,21 @@
         </div>
       </section>
     </main>
+    <footer class="site-footer">
+      <div class="container">
+        <p>
+          This page was built using the
+          <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank" rel="noopener noreferrer">Academic Project Page Template</a>
+          which was adapted from the
+          <a href="https://nerfies.github.io/" target="_blank" rel="noopener noreferrer">Nerfies</a>
+          project page. You are free to borrow the source code of this website, we just ask that you link back to this page in the footer.
+        </p>
+        <p>
+          This website is licensed under a
+          <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+        </p>
+      </div>
+    </footer>
   </body>
 </html>
 
